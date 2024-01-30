@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,TextAreaField,SubmitField,PasswordField,EqualTo,BooleanField
-from wtforms.validators import DataRequired, Length, Email
+from wtforms import StringField,TextAreaField,SubmitField,PasswordField,BooleanField
+from wtforms.validators import DataRequired, Length, Email,EqualTo
 
 class ContactForm(FlaskForm):
     email = StringField('Email',validators=[DataRequired(),Email()])
     subject = StringField('Subject',validators=[DataRequired()])
-    message = TextAreaField('Message',validators=[DataRequired])
+    message = TextAreaField('Message',validators=[DataRequired()])
     
     submit = SubmitField('Send')
     
@@ -23,7 +23,7 @@ class LoginForm(FlaskForm):
 
 
 class ProjectForm(FlaskForm):
-    title = StringField('Title',validators=[DataRequired])
+    title = StringField('Title',validators=[DataRequired()])
     # slug = StringField('Slug',validators=[DataRequired])
-    description = StringField('Description',validators=[DataRequired])
-    summary = TextAreaField('Summary',validators=[DataRequired])
+    description = StringField('Description',validators=[DataRequired()])
+    summary = TextAreaField('Summary',validators=[DataRequired()])
