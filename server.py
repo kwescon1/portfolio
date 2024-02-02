@@ -1,5 +1,5 @@
-from flask import Flask,render_template,request
-from services import contact
+from flask import Flask,render_template,request,flash,redirect,url_for
+from services.forms import ContactForm, LoginForm
 
 app = Flask(__name__)
 
@@ -8,6 +8,7 @@ app.config['SECRET_KEY'] ='7aff4eff697d6e2a4d2cff1f529d3d0f'
 @app.route('/')
 def homepage():
     return render_template('index.html')
+
 
 project_data = [
     {
@@ -87,7 +88,6 @@ project_data = [
 PER_PAGE = 6
 
 @app.route('/projects')
-@app.route('/projects')
 def projects_page():
     # Group projects into sets of three for the carousel
     grouped_projects = [project_data[i:i+3] for i in range(0, len(project_data), 3)]
@@ -100,7 +100,25 @@ def about():
 
 @app.route('/contact')
 def contact():
-    return render_template('contact.html')
+    form = ContactForm()
+    return render_template('contact.html',form=form)
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    form = LoginForm()
+    
+    if form.validate_on_submit():
+        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
+            flash('You have been logged in!','success')
+            return redirect(url_for('admin'))
+        else:
+            flash('Login unsuccessful. Please check username and password','danger')
+        
+    return render_template('admin/login.html',form=form)
+
+@app.route('/admin')
+def admin():
+    return "logged in"
 
 @app.route('/<string:slug>')
 def project(slug):
@@ -109,3 +127,6 @@ def project(slug):
 @app.route('/submit_form', methods=['POST','GET'])
 def submit_form():
     return contact.submit_form()
+
+# if __name__ == 'main':
+    # app.run(debug=1)
