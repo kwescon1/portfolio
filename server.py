@@ -1,9 +1,13 @@
 from flask import Flask,render_template,request,flash,redirect,url_for
+from flask_sqlalchemy import SQLAlchemy
 from services.forms import ContactForm, LoginForm
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] ='7aff4eff697d6e2a4d2cff1f529d3d0f'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+
+db = SQLAlchemy(app)
 
 @app.route('/')
 def homepage():
