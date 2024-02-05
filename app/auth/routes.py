@@ -1,12 +1,15 @@
-from flask import render_template,flash,redirect,url_for
+from flask import render_template,flash,redirect,url_for,request
 from app.services.forms import LoginForm
 from app.auth import bp
 from app.extensions import bcrypt
-from flask_login import login_user
+from flask_login import login_user,current_user,logout_user,login_required
 from app.models.user import User
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
+    # redirect user if already authenticated
+    if current_user.is_authenticated:
+        return redirect(url_for('admin.index'))
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -16,7 +19,10 @@ def login():
 
         if user and bcrypt.check_password_hash(user.password,form.password.data):
             login_user(user,remember=form.remember.data)
-            return redirect(url_for('admin.index'))
+            # redirect to next page if exists
+            next_page = request.args.get('next')
+
+            return redirect(next_page) if next_page else redirect(url_for('admin.index'))
         else:
             flash('Login Unsuccessful. Please check email and password','danger')
 
@@ -24,5 +30,7 @@ def login():
 
 
 @bp.route('/logout')
+@login_required
 def logout():
-    return "logged out"
+    logout_user()
+    return redirect(url_for('main.index'))
