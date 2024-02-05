@@ -70,6 +70,12 @@
               <li>
                 <a href="{{ url_for('main.contact') }}" title="">04 : Contact</a>
               </li>
+              <li>
+                {% if current_user.is_authenticated %}
+                  <a href="{{ url_for('auth.logout') }}" title="">05 : Logout</a>
+                {%endif%}
+
+              </li>
             </ul>
           </div>
         </div>
