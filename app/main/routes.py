@@ -1,5 +1,5 @@
 from flask import render_template
-from app.services.forms import ContactForm
+from app.webforms.forms import ContactForm
 from app.main import bp
 
 @bp.route('/')
